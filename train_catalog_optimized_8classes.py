@@ -1,12 +1,12 @@
 """
-CATALOG Modified - Optimized for 8 Classes (0, 3-9)
-Removing problematic classes 1 & 2 (Bear, Badger)
+"""CATALOG Modified - Training on All 10 Classes
+Using complete dataset without class filtering
 
 Strategy:
-- Filter training/val/test to only use 8 classes
-- Classes kept: 0,3,4,5,6,7,8,9 (8 animal classes)
-- Classes removed: 1,2 (Bear, Badger - were problematic)
-- Expected result: Higher accuracy on remaining classes
+- Use all 10 animal classes from Serengeti dataset
+- Classes: 0,1,2,3,4,5,6,7,8,9 (all animal classes)
+- No class filtering or removal
+- Training on complete multi-class problem
 """
 
 import torch
@@ -45,8 +45,8 @@ def main():
         print(f"GPU: {torch.cuda.get_device_name(0)}")
         print(f"GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB")
     
-    # Classes to keep (exclude 1 and 2)
-    classes_to_keep = [0, 3, 4, 5, 6, 7, 8, 9]
+    # Classes to keep (all 10 classes)
+    classes_to_keep = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     num_classes_filtered = len(classes_to_keep)
     
     # Configuration
@@ -59,11 +59,10 @@ def main():
     }
     
     print("\n" + "="*80)
-    print("CATALOG MODIFIED - OPTIMIZED FOR 8 CLASSES")
+    print("CATALOG MODIFIED - TRAINING ON ALL 10 CLASSES")
     print("="*80)
     print(f"\nStrategy:")
-    print(f"  Remove classes: [1 (Bear), 2 (Badger)]")
-    print(f"  Keep classes: {classes_to_keep}")
+    print(f"  Use all classes: {classes_to_keep}")
     print(f"  Training classes: {num_classes_filtered}")
     print(f"\nConfig:")
     for k, v in config.items():
@@ -121,13 +120,13 @@ def main():
     txt_global_orig = text_features.float()  # [512, 10]
     txt_global_orig = txt_global_orig.t()  # [10, 512]
     
-    txt_global = txt_global_orig[classes_to_keep]  # [8, 512] - keep only selected classes
+    txt_global = txt_global_orig[classes_to_keep]  # [10, 512] - keep all classes
     txt_global = txt_global.to(device)
     
     print(f"  Text embeddings: {txt_global.shape}")
     
-    # Create model for 8 classes
-    print("\n[MODEL] Creating CATALOG Modified (8 classes)...")
+    # Create model for 10 classes
+    print("\n[MODEL] Creating CATALOG Modified (10 classes)...")
     model = CALOGModified(
         num_classes=num_classes_filtered,
         feature_dim=config['feature_dim'],
@@ -147,7 +146,7 @@ def main():
     print("\n[TRAINING] Starting training...")
     print("="*80)
     
-    save_dir = os.path.join('Best/exp_CATALOG_Optimized_8Classes', 
+    save_dir = os.path.join('Best/exp_CATALOG_Optimized_10Classes', 
                            f"training_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
     os.makedirs(save_dir, exist_ok=True)
     
@@ -223,7 +222,7 @@ def main():
     
     # Test evaluation
     print("\n" + "="*80)
-    print("TEST EVALUATION (8 Classes Only)")
+    print("TEST EVALUATION (10 Classes)")
     print("="*80)
     
     if best_model_path:
@@ -255,7 +254,7 @@ def main():
     
     test_acc = (test_correct / len(test_img)) * 100
     
-    print(f"\nTest Accuracy (8 classes): {test_acc:.2f}%")
+    print(f"\nTest Accuracy (10 classes): {test_acc:.2f}%")
     print(f"Best Validation Accuracy: {best_val_acc:.2f}% (Epoch {best_epoch})")
     
     print(f"\nPer-class accuracy (Original class IDs):")

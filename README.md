@@ -131,9 +131,9 @@ Command-Line Arguments:
 
 This repository contains improvements to the original CATALOG model through architectural enhancements. Here's the comparison:
 
-| Metric | Original CATALOG | Modified CATALOG | Improvement |
+| **Test Accuracy** | Original CATALOG | Modified CATALOG | Improvement |
 |--------|------------------|------------------|-------------|
-| **Test Accuracy** | 75.33% | **78.30%** | **+2.97%** ✓ |
+| **10 Classes** | 75.33% | **78.30%** | **+2.97%** ✓ |
 | **Best Validation** | 75.51% | 78.30% | +2.79% |
 | **Loss (best epoch)** | 1.9019 | 0.5576 | **3.4× lower** ✓ |
 | **Generalization Gap** | 10.81% | 0.73% | **14.8× better** ✓ |
@@ -194,10 +194,10 @@ Modified: Fast start → Steady → Peak at E18 → Better (regularized)
 
 ### Dataset & Configuration
 
-- **Dataset**: Serengeti Wildlife (8,275 samples)
-  - Training: 6,165 samples (8 classes)
-  - Validation: 2,055 samples
-  - Testing: 2,055 samples
+- **Dataset**: Serengeti Wildlife (13,580 samples, 10 classes)
+  - Training: 8,148 samples (10 classes)
+  - Validation: 2,716 samples
+  - Testing: 2,716 samples
 - **Training**: 20 epochs, batch size 48, SGD (lr=0.08, momentum=0.8)
 - **Hardware**: NVIDIA RTX 3060 Laptop (6.44GB VRAM)
 
